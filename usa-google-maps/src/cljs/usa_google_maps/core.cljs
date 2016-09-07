@@ -33,8 +33,18 @@
   [map location]
   (js/google.maps.Marker. (clj->js (marker-options map location))))
 
-(defn create-infowindow [id]
-  (js/google.maps.InfoWindow. (clj->js {"content" (str "<div id='info-"id"'></div>")})))
+(defn create-info-window
+  "Creates new info window for given location attached to given marker."
+  [map location marker]
+  (let [info-window (js/google.maps.InfoWindow.
+                      (clj->js {"content" (str "<div>"
+                                            "<p><a target='_blank' href='"
+                                            (:uri location) "'>" (:name location) "</a></p>"
+                                            "</div>")}))]
+    (js/google.maps.event.addListener
+      marker
+      "click"
+      #(.open info-window map marker))))
 
 (defn create-map [location dom-element]
   (let [map-opts (clj->js {"center" (create-lat-lng location)
@@ -54,7 +64,9 @@
     (doseq [location l/locations]
       ;; TODO: add Info Window for each location
       ;; TODO: display custom icons (different for national parks, MUST SEE, etc.)
-      (create-marker my-map location))))
+      (->> (create-marker my-map location)
+        (create-info-window my-map location)
+        ))))
 
 (defn map-component []
   (reagent/create-class {:reagent-render map-component-render
