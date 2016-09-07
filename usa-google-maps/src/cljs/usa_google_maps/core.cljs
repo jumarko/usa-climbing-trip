@@ -7,11 +7,31 @@
 (defn create-lat-lng [location]
   (js/google.maps.LatLng. (:lat location) (:lng location)))
 
-(defn create-marker [map location]
-  (js/google.maps.Marker. (clj->js {"position" (create-lat-lng location)
-                                    "title" (:name location)
-                                    
-                                    "map" map})))
+(def marker-icons
+  {:climbing "images/climbing_marker_32x32.png" ;; check https://thenounproject.com/term/rock-climbing/529/
+   :national-park "images/national_park_marker_32x32.png" ;; check https://thenounproject.com/search/?q=national+park&i=158731
+   :city "images/city_marker_32x32.png" ;; check http://megaicons.net/static/img/icons_title/22/119/title/city-building-icon.png
+   })
+
+(defn marker-options [map location]
+  (let [default-marker-options {"position" (create-lat-lng location)
+                                "title" (:name location)
+                                "map" map}]
+    (if-let [tags (:tags location)]
+      (cond
+        (:climbing tags) (assoc default-marker-options "icon" (:climbing marker-icons))
+        (:national-park tags) (assoc default-marker-options "icon" (:national-park marker-icons))
+        (:city tags)(assoc default-marker-options "icon" (:city marker-icons))
+        :else default-marker-options)
+      default-marker-options)))
+
+(defn create-marker
+  "Creates new marker attached to the given map at given location.
+  Check marker documentation: 
+    main: https://developers.google.com/maps/documentation/javascript/markers
+    custom markers: https://developers.google.com/maps/documentation/javascript/tutorials/custom-markers"
+  [map location]
+  (js/google.maps.Marker. (clj->js (marker-options map location))))
 
 (defn create-infowindow [id]
   (js/google.maps.InfoWindow. (clj->js {"content" (str "<div id='info-"id"'></div>")})))
