@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/usa-google-maps.jar clojure.main -m usa-google-maps.server
