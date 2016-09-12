@@ -3,7 +3,8 @@
             [compojure.route :refer [not-found resources]]
             [hiccup.page :refer [include-js include-css html5]]
             [usa-google-maps.middleware :refer [wrap-middleware]]
-            [config.core :refer [env]]))
+            [config.core :refer [env]]
+            [usa-google-maps.locations.database :as ld]))
 
 (def mount-target
   [:div#app
@@ -26,11 +27,21 @@
      mount-target
      (include-js "/js/app.js")]))
 
+(defn about-page []
+  (html5
+    [:div
+     [:p [:h1 "ABOUT"]]]))
+
+
+(defn locations-page []
+  {:status 200
+   :body ld/locations})
 
 (defroutes routes
   (GET "/" [] (loading-page))
-  (GET "/about" [] (loading-page))
-  
+  (GET "/about" [] (about-page))
+  (GET "/locations" [] (locations-page))
+
   (resources "/")
   (not-found "Not Found"))
 

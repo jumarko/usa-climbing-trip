@@ -1,7 +1,10 @@
 (ns usa-google-maps.core
-  (:require [reagent.core :as reagent :refer [atom]]
-            [usa-google-maps.locations :as l]))
-
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [reagent.core :as r]
+            [usa-google-maps.locations :as l]
+            [cljs.core.async :as a :refer [<!]]))
+;;; locations data
+(defonce locations (r/atom []))
 
 ;;; reusable functions for work with google js api
 (defn create-lat-lng [location]
@@ -60,26 +63,31 @@
                  :align "middle"}}])
 
 (defn map-component-did-mount [this]
-  (let [my-map (create-map l/salt-lake-city (reagent/dom-node this))]
-    (doseq [location l/locations]
-      ;; TODO: add Info Window for each location
-      ;; TODO: display custom icons (different for national parks, MUST SEE, etc.)
-      (->> (create-marker my-map location)
-        (create-info-window my-map location)
-        ))))
+  (let [locs @locations
+        salt-lake-city (some #(when (= (:name %) "Salt Lake City") %) locs)]
+    (if salt-lake-city
+      (let [my-map (create-map salt-lake-city (r/dom-node this))]
+        (doseq [loc locs]
+          ;; TODO: add Info Window for each location
+          ;; TODO: display custom icons (different for national parks, MUST SEE, etc.)
+          (->> (create-marker my-map loc)
+            (create-info-window my-map loc)))))))
 
 (defn map-component []
-  (reagent/create-class {:reagent-render map-component-render
-                         :component-did-mount map-component-did-mount}))
+  (r/create-class {:reagent-render map-component-render
+                   :component-did-mount map-component-did-mount}))
 
 
 ;;; rendering
-
 (defn mount-root []
-  (reagent/render [map-component] (.getElementById js/document "app")))
+  (r/render [map-component] (.getElementById js/document "app")))
 
 (defn init! []
   (mount-root))
 
+
+;;; Initial trigger to load locations
+(go (let [response (<! (l/fetch-locations))]
+      (reset! locations (:body response))))
 
 

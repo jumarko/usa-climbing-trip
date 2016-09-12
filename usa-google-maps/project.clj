@@ -6,6 +6,7 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [ring-server "0.4.0"]
+                 [ring-middleware-format "0.7.0"]
                  [reagent "0.6.0-rc"]
                  [reagent-forms "0.5.25"]
                  [reagent-utils "0.2.0"]
@@ -18,7 +19,11 @@
                   :scope "provided"]
                  [secretary "1.2.3"]
                  [venantius/accountant "0.1.7"
-                  :exclusions [org.clojure/tools.reader]]]
+                  :exclusions [org.clojure/tools.reader]]
+                 [clj-http "2.2.0"]
+                 [cljs-http "0.1.41"]
+                 [enlive "1.1.6"]
+                 [hickory "0.6.0"]]
 
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
