@@ -6,6 +6,11 @@
 ;;; locations data
 (defonce locations (r/atom []))
 
+(defn fetch-locations []
+  (go (let [locs (<! (l/fetch-locations))]
+        (reset! locations locs))))
+
+
 ;;; reusable functions for work with google js api
 (defn create-lat-lng [location]
   (js/google.maps.LatLng. (:lat location) (:lng location)))
@@ -20,6 +25,7 @@
   (let [default-marker-options {"position" (create-lat-lng location)
                                 "title" (:name location)
                                 "map" map}]
+    (println (:tags location))
     (if-let [tags (:tags location)]
       (cond
         (:climbing tags) (assoc default-marker-options "icon" (:climbing marker-icons))
@@ -35,6 +41,7 @@
     custom markers: https://developers.google.com/maps/documentation/javascript/tutorials/custom-markers"
   [map location]
   (js/google.maps.Marker. (clj->js (marker-options map location))))
+
 
 (defn create-info-window
   "Creates new info window for given location attached to given marker."
@@ -63,19 +70,21 @@
                  :align "middle"}}])
 
 (defn map-component-did-mount [this]
+  (fetch-locations)
+  
   (let [locs @locations
         salt-lake-city (some #(when (= (:name %) "Salt Lake City") %) locs)]
+    (println "map component did mount; salt lake city=" salt-lake-city)
     (if salt-lake-city
       (let [my-map (create-map salt-lake-city (r/dom-node this))]
         (doseq [loc locs]
-          ;; TODO: add Info Window for each location
-          ;; TODO: display custom icons (different for national parks, MUST SEE, etc.)
           (->> (create-marker my-map loc)
             (create-info-window my-map loc)))))))
 
 (defn map-component []
   (r/create-class {:reagent-render map-component-render
-                   :component-did-mount map-component-did-mount}))
+                   :component-did-mount map-component-did-mount
+                   :display-name "map component"}))
 
 
 ;;; rendering
@@ -84,10 +93,3 @@
 
 (defn init! []
   (mount-root))
-
-
-;;; Initial trigger to load locations
-(go (let [response (<! (l/fetch-locations))]
-      (reset! locations (:body response))))
-
-

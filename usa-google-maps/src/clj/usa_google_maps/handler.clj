@@ -4,7 +4,8 @@
             [hiccup.page :refer [include-js include-css html5]]
             [usa-google-maps.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]
-            [usa-google-maps.locations.database :as ld]))
+            [usa-google-maps.locations.database :as ld]
+            [ring.middleware.format :refer [wrap-restful-format]]))
 
 (def mount-target
   [:div#app
@@ -35,7 +36,8 @@
 
 (defn locations-page []
   {:status 200
-   :body ld/locations})
+   ;; need to convert body to map because client side doesn't have access to defrecord Location definition
+   :body (map #(into {} %) ld/locations)})
 
 (defroutes routes
   (GET "/" [] (loading-page))
@@ -45,4 +47,5 @@
   (resources "/")
   (not-found "Not Found"))
 
-(def app (wrap-middleware #'routes))
+(def app (-> (wrap-restful-format #'routes)
+           (wrap-middleware)))

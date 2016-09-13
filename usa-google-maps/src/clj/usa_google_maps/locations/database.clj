@@ -100,28 +100,28 @@
 
 ;;; National parks
 (def yellowstone (make-location "Yelowstone national park" 44.4279675 -110.5972089
-                   "https://www.nps.gov/yell/index.htm"
+                   "https://www.mountainproject.com/v/yellowstone-national-park/105964751"
                    #{:national-park}))
 (def grand-teton (make-location "Grand Teton national park" 43.8075909 -110.8285948
-                   "https://www.nps.gov/grte/index.htm"
-                   #{:national-park}))
+                   "https://www.mountainproject.com/v/grand-teton-national-park/105802912"
+                   #{:national-park :climbing}))
 (def rocky-mountains (make-location "Rocky Mountains national park" 40.3772059 -105.5216651
-                       "https://www.nps.gov/romo/index.htm"
-                       #{:national-park}))
+                       "https://www.mountainproject.com/v/rmnp---rock/105744460"
+                       #{:national-park :climbing}))
 (def yosemite (make-location "Yosemite national park - Half Dome" 37.7775114 -119.6157417
-                "https://www.nps.gov/yose/index.htm"
-                #{:national-park}))
+                "https://www.mountainproject.com/v/yosemite-national-park/105833381"
+                #{:national-park :climbing}))
 (def zion (make-location "Zion national park" 37.2982022 -113.0263005
-            "https://www.nps.gov/zion/index.htm"
-            #{:national-park}))
+            "https://www.mountainproject.com/v/zion-national-park/105716799"
+            #{:national-park :climbing}))
 (def joshua-tree (make-location "Joshua Tree national park" 33.873415 -115.9009923
-                   "https://www.nps.gov/jotr/index.htm"
-                   #{:national-park}))
+                   "https://www.mountainproject.com/v/joshua-tree-national-park/105720495"
+                   #{:national-park :climbing}))
 (def death-valley (make-location "Death Valley national park" 36.5053891 -117.0794078
                     "https://www.nps.gov/deva/index.htm"
                     #{:national-park}))
 (def grand-canyon (make-location "Grand Canyon national park" 36.0600031 -112.1243856
-                    "https://www.nps.gov/grca/index.htm"
+                    "https://www.mountainproject.com/v/grand-canyon-national-park/105787841"
                     #{:national-park}))
 
 
