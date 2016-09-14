@@ -8,3 +8,8 @@
                             {:accept "application/edn"}))]
         (:body response))))
 
+(defn fetch-road-trip []
+  (go (let [response (<!  (http/get "/road-trip"
+                            {:accept "application/edn"}))]
+        (:body response))))
+

@@ -109,9 +109,9 @@
 (def grand-teton (make-location "Grand Teton national park" 43.8075909 -110.8285948
                    "https://www.mountainproject.com/v/grand-teton-national-park/105802912"
                    #{:national-park}))
-(def rocky-mountains (make-location "Rocky Mountains national park" 40.3772059 -105.5216651
-                       "https://www.mountainproject.com/v/rmnp---rock/105744460"
-                       #{:national-park}))
+(def rocky-mountain (make-location "Rocky Mountains national park" 40.3772059 -105.5216651
+                      "https://www.mountainproject.com/v/rmnp---rock/105744460"
+                      #{:national-park}))
 (def yosemite (make-location "Yosemite national park - Half Dome" 37.7775114 -119.6157417
                 "https://www.mountainproject.com/v/yosemite-national-park/105833381"
                 #{:national-park :climbing}))
@@ -156,7 +156,7 @@
                 grand-canyon
                 yellowstone
                 grand-teton
-                rocky-mountains
+                rocky-mountain
                 yosemite
                 zion
                 joshua-tree
@@ -166,3 +166,22 @@
 
 
 
+(def road-trip [san-francisco
+                yosemite
+                oregon-smith-rock
+                idaho-city-of-rocks
+                utah-logan
+                grand-teton
+                rocky-mountain
+                colorado-boulder-canyon
+                colorado-shelf-road
+                colorado-rifle
+                utah-moab-wall-street
+                utah-moab-indian-creek
+                zion
+                grand-canyon
+                nevada-red-rocks
+                death-valley
+                california-owens-river-gorge
+                joshua-tree
+                los-angeles-airport])

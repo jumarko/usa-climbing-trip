@@ -34,15 +34,22 @@
      [:p [:h1 "ABOUT"]]]))
 
 
-(defn locations-page []
+(defn locations-resource []
   {:status 200
    ;; need to convert body to map because client side doesn't have access to defrecord Location definition
    :body (map #(into {} %) ld/locations)})
 
+(defn road-trip-resource []
+  {:status 200
+   ;; need to convert body to map because client side doesn't have access to defrecord Location definition
+   :body (map #(into {} %) ld/road-trip)})
+
+
 (defroutes routes
   (GET "/" [] (loading-page))
   (GET "/about" [] (about-page))
-  (GET "/locations" [] (locations-page))
+  (GET "/locations" [] (locations-resource))
+  (GET "/road-trip" [] (road-trip-resource))
 
   (resources "/")
   (not-found "Not Found"))

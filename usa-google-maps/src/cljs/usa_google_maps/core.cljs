@@ -5,7 +5,7 @@
             [cljs.core.async :as a :refer [<!]]))
 
 ;;; locations data
-(defonce locations (r/atom []))
+(defonce app-db (r/atom {}))
 
 ;;; reusable functions for work with google js api
 (defn create-lat-lng [location]
@@ -60,21 +60,46 @@
                            "scaleControl" true})]
     (js/google.maps.Map. dom-element map-opts)))
 
+(defn to-location-string [location]
+  (str (:lat location) " " (:lng location)))
+
+(defn render-road-trip [road-trip map-component]
+  (let [directions-service  (js/google.maps.DirectionsService.)
+        directions-display (doto  (js/google.maps.DirectionsRenderer.)
+                             (.setMap map-component))
+        origin (first road-trip)
+        destination (last road-trip)
+        ;; at most 8 waypoints are allowed -> check https://developers.google.com/maps/documentation/javascript/directions#waypoint-limits
+        waypoints (subvec road-trip 1 (min 9 (dec (count road-trip))))
+        direction-request (clj->js {:origin (to-location-string origin)
+                                    :destination (to-location-string destination)
+                                    :waypoints (map (fn [location] {:location (to-location-string location)})
+                                                 waypoints)
+                                    :travelMode "DRIVING"})]
+    (.route directions-service
+      direction-request
+      (fn [result status]
+        (if (= "OK" status)
+          (.setDirections directions-display result)
+          (js/alert (str  "Route planning error! status=" status)))
+        ))))
+
 
 ;;; map component
 (defn map-component-render []
-  [:div {:style {:width "1280px"
+  [:div {:style {:width "1920px"
                  :height "1080px"
-                 :align "middle"}}])
+                 :align "left"}}])
 
 (defn map-component-did-mount [this]
-  (let [locs @locations
+  (let [locs (:locations  @app-db)
         salt-lake-city (some #(when (= (:name %) "Salt Lake City") %) locs)]
     (if salt-lake-city
       (let [my-map (create-map salt-lake-city (r/dom-node this))]
         (doseq [loc locs]
           (->> (create-marker my-map loc)
-            (create-info-window my-map loc)))))))
+            (create-info-window my-map loc)))
+        (render-road-trip (:road-trip @app-db) my-map)))))
 
 (defn map-component []
   (r/create-class {:reagent-render map-component-render
@@ -86,10 +111,12 @@
 (defn mount-root []
   (r/render [map-component] (.getElementById js/document "app")))
 
-;; fetch locations, then render map component
+;; fetch data, then render map component
 (defn fetch-data-and-render []
-  (go (let [locs (<! (l/fetch-locations))]
-        (reset! locations locs)
+  (go (let [locs (vec (<! (l/fetch-locations)))
+            road-trip (vec (<! (l/fetch-road-trip)))]
+        (reset! app-db {:locations locs
+                        :road-trip road-trip})
         (mount-root))))
 
 (defn init! []
