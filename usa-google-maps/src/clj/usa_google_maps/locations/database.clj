@@ -89,6 +89,10 @@
                                 "https://www.mountainproject.com/v/alabama-hills/105876822"
                                 #{:climbing}))
 
+(def california-buttermilk-bouldering (make-location "California - Buttermilk Country - bouldering" 37.3291 -118.5771
+                                        "https://www.mountainproject.com/v/buttermilk-country/105876411"
+                                        #{:climbing}))
+
 (def arizona-cochise-stronghold (make-location "Arizona - Cochise Stronghold" 31.9212 -109.98703
                                   "http://www.mountainproject.com/v/cochise-stronghold/105738034"
                                   #{:climbing}))
@@ -118,11 +122,12 @@
                    "https://www.mountainproject.com/v/joshua-tree-national-park/105720495"
                    #{:national-park :climbing}))
 (def death-valley (make-location "Death Valley national park" 36.5053891 -117.0794078
-                    "https://www.nps.gov/deva/index.htm"
+                    "https://www.nps.gov/deva/learn/nature/weather-and-climate.htm"
                     #{:national-park}))
 (def grand-canyon (make-location "Grand Canyon national park" 36.0600031 -112.1243856
                     "https://www.mountainproject.com/v/grand-canyon-national-park/105787841"
-                    #{:national-park}))
+                    #{:national-park}
+                    {:uri2 "https://www.nps.gov/deva/index.htm"}))
 
 
 (def locations [los-angeles-airport
@@ -144,6 +149,7 @@
                 california-owens-river-gorge
                 california-needles
                 california-alabama-hills
+                california-buttermilk-bouldering
                 arizona-cochise-stronghold
                 oklahoma-wichita
 
