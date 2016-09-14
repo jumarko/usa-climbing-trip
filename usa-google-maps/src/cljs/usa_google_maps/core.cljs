@@ -87,9 +87,10 @@
 
 ;;; map component
 (defn map-component-render []
-  [:div {:style {:width "1920px"
+  [:div {:style {:position "relative"
+                 :width "1920px"
                  :height "1080px"
-                 :align "left"}}])
+                 :align "center"}}])
 
 (defn map-component-did-mount [this]
   (let [locs (:locations  @app-db)
@@ -106,10 +107,23 @@
                    :component-did-mount map-component-did-mount
                    :display-name "map component"}))
 
+(defn show-route-component []
+  (let [road-trip (:road-trip @app-db)]
+    [:div 
+     [:p [:i "Start: "] [:b  (:name (first road-trip))]]
+     [:p [:i  "Displayed waypoints: "] [:b  (clojure.string/join " -> " (map  #(:name %) (subvec road-trip 1 9)))]]
+     [:p [:i "Waypoints not shown: "] (clojure.string/join " -> " (map  #(:name %) (subvec road-trip 9 (dec (count road-trip)))))]
+     [:p [:i "End: "] [:b  (:name (last road-trip))]]]
+    ))
+
+(defn main-component []
+  [:div 
+   [:div#show-route [show-route-component]]
+   [:div#map [map-component]]])
 
 ;;; rendering
 (defn mount-root []
-  (r/render [map-component] (.getElementById js/document "app")))
+  (r/render [main-component] (.getElementById js/document "app")))
 
 ;; fetch data, then render map component
 (defn fetch-data-and-render []
