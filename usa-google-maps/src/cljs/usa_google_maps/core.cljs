@@ -6,11 +6,6 @@
 ;;; locations data
 (defonce locations (r/atom []))
 
-(defn fetch-locations []
-  (go (let [locs (<! (l/fetch-locations))]
-        (reset! locations locs))))
-
-
 ;;; reusable functions for work with google js api
 (defn create-lat-lng [location]
   (js/google.maps.LatLng. (:lat location) (:lng location)))
@@ -25,7 +20,6 @@
   (let [default-marker-options {"position" (create-lat-lng location)
                                 "title" (:name location)
                                 "map" map}]
-    (println (:tags location))
     (if-let [tags (:tags location)]
       (cond
         (:climbing tags) (assoc default-marker-options "icon" (:climbing marker-icons))
@@ -70,11 +64,8 @@
                  :align "middle"}}])
 
 (defn map-component-did-mount [this]
-  (fetch-locations)
-  
   (let [locs @locations
         salt-lake-city (some #(when (= (:name %) "Salt Lake City") %) locs)]
-    (println "map component did mount; salt lake city=" salt-lake-city)
     (if salt-lake-city
       (let [my-map (create-map salt-lake-city (r/dom-node this))]
         (doseq [loc locs]
@@ -91,5 +82,13 @@
 (defn mount-root []
   (r/render [map-component] (.getElementById js/document "app")))
 
+;; fetch locations, then render map component
+(defn fetch-data-and-render []
+  (go (let [locs (<! (l/fetch-locations))]
+        (reset! locations locs)
+        (mount-root))))
+
 (defn init! []
-  (mount-root))
+  ;; do nothing - the rendering is postponed until locations are fetched
+  (fetch-data-and-render))
+
