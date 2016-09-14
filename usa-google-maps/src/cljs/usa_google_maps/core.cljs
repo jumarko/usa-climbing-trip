@@ -14,6 +14,7 @@
   {:climbing "images/climbing_marker_32x32.png" ;; check https://thenounproject.com/term/rock-climbing/529/
    :national-park "images/national_park_marker_32x32.png" ;; check https://thenounproject.com/search/?q=national+park&i=158731
    :city "images/city_marker_32x32.png" ;; check http://megaicons.net/static/img/icons_title/22/119/title/city-building-icon.png
+   :climbing-national-park "images/climbing_and_national_park_marker_32x32.png" ;; custom icon
    })
 
 (defn marker-options [map location]
@@ -22,6 +23,7 @@
                                 "map" map}]
     (if-let [tags (:tags location)]
       (cond
+        (and (:climbing tags) (:national-park tags)) (assoc default-marker-options "icon" (:climbing-national-park marker-icons))
         (:climbing tags) (assoc default-marker-options "icon" (:climbing marker-icons))
         (:national-park tags) (assoc default-marker-options "icon" (:national-park marker-icons))
         (:city tags)(assoc default-marker-options "icon" (:city marker-icons))
