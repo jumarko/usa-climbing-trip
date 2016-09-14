@@ -3,6 +3,7 @@
   (:require [reagent.core :as r]
             [usa-google-maps.locations :as l]
             [cljs.core.async :as a :refer [<!]]))
+
 ;;; locations data
 (defonce locations (r/atom []))
 
@@ -55,7 +56,8 @@
 (defn create-map [location dom-element]
   (let [map-opts (clj->js {"center" (create-lat-lng location)
                            "zoom" 6
-                           "mapTypeId" "roadmap"})]
+                           "mapTypeId" "roadmap"
+                           "scaleControl" true})]
     (js/google.maps.Map. dom-element map-opts)))
 
 
