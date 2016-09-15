@@ -80,7 +80,15 @@
       direction-request
       (fn [result status]
         (if (= "OK" status)
-          (.setDirections directions-display result)
+          (do 
+            (.setDirections directions-display result)
+            (let [legs (-> result
+                         (.-routes)
+                         (aget 0)
+                         (.-legs))
+                  legs-distances (map #(.-value (.-distance %)) legs)
+                  total-distance-in-meters (apply + legs-distances)]
+              (swap! app-db assoc :road-trip-distance total-distance-in-meters)))
           (js/alert (str  "Route planning error! status=" status)))
         ))))
 
@@ -116,9 +124,12 @@
      [:p [:i "End: "] [:b  (:name (last road-trip))]]]
     ))
 
+(defn total-distance-component [total-distance]
+  [:p "Total distance (in meters): " total-distance])
 (defn main-component []
   [:div 
    [:div#show-route [show-route-component]]
+   [:div [total-distance-component (:road-trip-distance @app-db)]]
    [:div#map [map-component]]])
 
 ;;; rendering
