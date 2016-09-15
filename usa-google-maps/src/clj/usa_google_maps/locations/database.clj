@@ -53,6 +53,10 @@
                               "https://www.mountainproject.com/v/indian-creek/105716763"
                               #{:climbing}))
 
+(def utah-arches (make-location "Utah - Arches national park" 38.6242 -109.5994
+                   "https://www.mountainproject.com/v/arches-national-park/105716757"
+                   #{:climbing :national-park}))
+
 (def utah-logan (make-location "Utah - Logan" 41.7435 -111.795
                   "https://www.mountainproject.com/v/logan/105739310"
                   #{:climbing}))
@@ -140,6 +144,7 @@
                 utah-american-fork
                 utah-moab-wall-street
                 utah-moab-indian-creek
+                utah-arches
                 utah-logan
                 utah-maple-canyon
                 nevada-red-rocks
@@ -178,6 +183,7 @@
                 colorado-rifle
                 utah-moab-wall-street
                 utah-moab-indian-creek
+                utah-arches
                 zion
                 grand-canyon
                 nevada-red-rocks
