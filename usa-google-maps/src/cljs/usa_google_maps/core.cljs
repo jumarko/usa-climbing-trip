@@ -60,44 +60,25 @@
                            "scaleControl" true})]
     (js/google.maps.Map. dom-element map-opts)))
 
-(defn to-location-string [location]
-  (str (:lat location) " " (:lng location)))
 
 (defn render-road-trip [road-trip map-component]
-  (let [directions-service  (js/google.maps.DirectionsService.)
-        directions-display (doto  (js/google.maps.DirectionsRenderer.)
-                             (.setMap map-component))
-        origin (first road-trip)
-        destination (last road-trip)
-        ;; at most 8 waypoints are allowed -> check https://developers.google.com/maps/documentation/javascript/directions#waypoint-limits
-        waypoints (subvec road-trip 1 (min 9 (dec (count road-trip))))
-        direction-request (clj->js {:origin (to-location-string origin)
-                                    :destination (to-location-string destination)
-                                    :waypoints (map (fn [location] {:location (to-location-string location)})
-                                                 waypoints)
-                                    :travelMode "DRIVING"})]
-    (.route directions-service
-      direction-request
-      (fn [result status]
-        (if (= "OK" status)
-          (do 
-            (.setDirections directions-display result)
-            (let [legs (-> result
-                         (.-routes)
-                         (aget 0)
-                         (.-legs))
-                  legs-distances (map #(.-value (.-distance %)) legs)
-                  total-distance-in-meters (apply + legs-distances)]
-              (swap! app-db assoc :road-trip-distance total-distance-in-meters)))
-          (js/alert (str  "Route planning error! status=" status)))
-        ))))
+  (let [locations-as-lat-lng-pairs (map (fn [loc] {"lat" (:lat loc) "lng" (:lng loc)})
+                                     road-trip)
+        polyline-opts (clj->js {"path" locations-as-lat-lng-pairs
+                                "geodesic" true
+                                "strokeColor" "RED"
+                                "strokeOpacity" 1.0
+                                "strokeWeight" 2})
+        _ (println polyline-opts)
+        polyline (js/google.maps.Polyline. polyline-opts)]
+    (.setMap polyline map-component)))
 
 
 ;;; map component
 (defn map-component-render []
   [:div {:style {:position "relative"
                  :width "1280px"
-                 :height "1080px"
+                 :height "800px"
                  :align "center"}}])
 
 (defn map-component-did-mount [this]
@@ -117,19 +98,21 @@
 
 (defn show-route-component []
   (let [road-trip (:road-trip @app-db)]
-    [:div 
+    [:div#show-route
      [:p [:i "Start: "] [:b  (:name (first road-trip))]]
-     [:p [:i  "Displayed waypoints: "] [:b  (clojure.string/join " -> " (map  #(:name %) (subvec road-trip 1 9)))]]
-     [:p [:i "Waypoints not shown: "] (clojure.string/join " -> " (map  #(:name %) (subvec road-trip 9 (dec (count road-trip)))))]
+     [:p [:i  "Waypoints: "] (clojure.string/join " -> " (map  #(:name %) (subvec  road-trip 1 (dec (count road-trip)))))]
      [:p [:i "End: "] [:b  (:name (last road-trip))]]]
     ))
 
 (defn total-distance-component [total-distance]
   [:p "Total distance (in meters): " total-distance])
+
 (defn main-component []
   [:div 
-   [:div#show-route [show-route-component]]
-   [:div [total-distance-component (:road-trip-distance @app-db)]]
+   [:div#show-route {:style {:max-width "1000px"}} [show-route-component]]
+   ;; we are not able to calculate total distance now - we just plot simple polylines
+   ;; among the waypoints
+   #_[:div [total-distance-component (:road-trip-distance @app-db)]]
    [:div#map [map-component]]])
 
 ;;; rendering
