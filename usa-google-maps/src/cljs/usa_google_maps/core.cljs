@@ -2,10 +2,30 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as r]
             [usa-google-maps.locations :as l]
-            [cljs.core.async :as a :refer [<!]]))
+            [cljs.core.async :as a :refer [<!]]
+            [clojure.string :as str]))
 
 ;;; locations data
 (defonce app-db (r/atom {}))
+
+
+;;; date formatting functions
+(defn- format-date [date-str]
+  (->  (apply str (take 6 date-str))
+    (str/replace "-"  ".")))
+
+(defn- arrival-date [location]
+  (-> location
+    :details
+    :arrival
+    format-date))
+
+(defn- departure-date [location]
+  (-> location
+    :details
+    :departure
+    format-date))
+
 
 ;;; reusable functions for work with google js api
 (defn create-lat-lng [location]
@@ -45,8 +65,12 @@
   [map location marker]
   (let [info-window (js/google.maps.InfoWindow.
                       (clj->js {"content" (str "<div>"
-                                            "<p><a target='_blank' href='"
-                                            (:uri location) "'>" (:name location) "</a></p>"
+                                            "<p>"
+                                            "<a target='_blank' href='"
+                                            (:uri location) "'>" (:name location) "</a></br>"
+                                            "Arrival: " (arrival-date location)
+                                            "; Departure: " (departure-date location)
+                                            "</p>"
                                             "</div>")}))]
     (js/google.maps.event.addListener
       marker
@@ -69,7 +93,6 @@
                                 "strokeColor" "RED"
                                 "strokeOpacity" 1.0
                                 "strokeWeight" 2})
-        _ (println polyline-opts)
         polyline (js/google.maps.Polyline. polyline-opts)]
     (.setMap polyline map-component)))
 
@@ -99,9 +122,10 @@
 (defn show-route-component []
   (let [road-trip (:road-trip @app-db)]
     [:div#show-route
-     [:p [:i "Start: "] [:b  (:name (first road-trip))]]
-     [:p [:i  "Waypoints: "] (clojure.string/join " -> " (map  #(:name %) (subvec  road-trip 1 (dec (count road-trip)))))]
-     [:p [:i "End: "] [:b  (:name (last road-trip))]]]
+     [:p [:i "Start: "] [:b (arrival-date (first road-trip)) " " (:name (first road-trip))]]
+     [:p [:i  "Waypoints: "] (clojure.string/join " -> "
+                               (map  #(str (arrival-date %) " " (:name %)) (subvec  road-trip 1 (dec (count road-trip)))))]
+     [:p [:i "End: "] [:b (arrival-date (last road-trip)) " " (:name (last road-trip))]]]
     ))
 
 (defn total-distance-component [total-distance]
