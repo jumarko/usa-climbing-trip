@@ -46,7 +46,7 @@
 
   :source-paths ["src/clj" "src/cljc"]
   :resource-paths ["resources" "target/cljsbuild"]
-
+  
   :minify-assets
   {:assets
    {"resources/public/css/site.min.css" "resources/public/css/site.css"}}
@@ -58,7 +58,8 @@
              {:output-to "target/cljsbuild/public/js/app.js"
               :output-dir "target/uberjar"
               :optimizations :advanced
-              :pretty-print  false}}
+              :pretty-print false
+              :externs ["externs/google_maps_api_v3_26.js"]}}
             :app
             {:source-paths ["src/cljs" "src/cljc" "env/dev/cljs"]
              :compiler
@@ -69,9 +70,6 @@
               :source-map true
               :optimizations :none
               :pretty-print  true}}
-
-
-
             }
    }
 

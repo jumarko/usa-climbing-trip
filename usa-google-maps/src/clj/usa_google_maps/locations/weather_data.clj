@@ -38,16 +38,13 @@
         #(when % (.contains % "drawChartSeason")))
       first
       (re-find #"data.addRows\((.*)\)")
-second
-to-weather-data)))
+      second
+      to-weather-data)))
 
-(def locations-weather-data (into {} (map (fn [loc] [(:name  loc) (get-location-weather loc)]) l/locations)))
-
-(clojure.pprint/pprint locations-weather-data)
+#_(def locations-weather-data (into {} (map (fn [loc] [(:name  loc) (get-location-weather loc)]) l/locations)))
 
 (defn only-last-4-months [locations-weather-data]
-(map (fn [[k v]] [k (take-last 4 v)]) locations-weather-data))
+  (map (fn [[k v]] [k (take-last 4 v)]) locations-weather-data))
 
-(only-last-4-months locations-weather-data)
 
 

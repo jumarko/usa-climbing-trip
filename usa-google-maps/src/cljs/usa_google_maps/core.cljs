@@ -96,7 +96,7 @@
 ;;; map component
 (defn map-component-render []
   [:div {:style {:position "relative"
-                 :width "1920px"
+                 :width "1280px"
                  :height "1080px"
                  :align "center"}}])
 
