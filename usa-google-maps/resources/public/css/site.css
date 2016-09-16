@@ -1,10 +1,10 @@
 .body-container {
   font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
   padding-top: 72px;
   -webkit-font-smoothing: antialiased;
-  font-size: 1.125em;
+  font-size: 1em;
   color: #333;
   line-height: 1.5em;
 }
@@ -31,4 +31,8 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+#show-route {
+  max-width: 100%
 }
