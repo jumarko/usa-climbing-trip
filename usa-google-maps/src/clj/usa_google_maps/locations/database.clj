@@ -31,6 +31,10 @@
                       #{:city}
                       ))
 
+(def bodie-ghost-town (make-location "Bodie - ghost town" 38.2141532 -119.0067897
+                        "http://www.bodie.com/"
+                        #{:city}))
+
 
 ;;; rock climbing areas
 (def oregon-smith-rock (make-location "Oregon - Smith Rock" 44.3657, -121.143
@@ -181,6 +185,7 @@
 (def locations [los-angeles-airport
                 san-francisco
                 salt-lake-city
+                bodie-ghost-town
 
                 oregon-smith-rock
                 oregon-trout-creek
