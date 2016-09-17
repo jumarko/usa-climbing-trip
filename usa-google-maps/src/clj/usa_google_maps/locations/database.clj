@@ -130,7 +130,7 @@
                    "https://www.mountainproject.com/v/grand-teton-national-park/105802912"
                    #{:national-park}
                    {:arrival "22-10-2016" :departure "25-10-2016"}))
-(def rocky-mountain (make-location "Rocky Mountains national park" 40.3772059 -105.5216651
+(def rocky-mountain (make-location "Rocky Mountain national park" 40.3772059 -105.5216651
                       "https://www.mountainproject.com/v/rmnp---rock/105744460"
                       #{:national-park}
                       {:arrival "28-10-2016" :departure "30-10-2016"}))
@@ -156,6 +156,27 @@
                     {:uri2 "https://www.nps.gov/deva/index.htm"
                      :arrival "17-11-2016" :departure "19-11-2016"}))
 
+
+;;; State parks
+;;; See https://stateparks.utah.gov/ for Utah state parks
+(def utah-dead-horse-state-park (make-location "Utah - Dead Horse Point State Park" 38.5010992 -109.7375474
+                                  "https://stateparks.utah.gov/parks/dead-horse/"
+                                  #{:state-park}
+                                  {:arrival "??-11-2016" :departure "??-11-2016"}))
+
+(def utah-antelope-island-state-park (make-location "Utah - Antelope Island State Park" 40.9539904 -112.3522223
+                                       "https://stateparks.utah.gov/parks/antelope-island/"
+                                       #{:state-park}
+                                       {:arrival "??-10-2016" :departure "??-10-2016"}))
+
+(def utah-goblin-valley-state-park (make-location "Utah - Goblin Valley State Park" 38.5689784 -110.7084757
+                                     "https://stateparks.utah.gov/parks/goblin-valley/"
+                                     #{:state-park}
+                                     {:arrival "??-11-2016" :departure "??-11-2016"}))
+
+
+
+;;; Locations wrap-up
 
 (def locations [los-angeles-airport
                 san-francisco
@@ -190,6 +211,10 @@
                 joshua-tree
                 death-valley
                 grand-canyon
+
+                utah-dead-horse-state-park
+                utah-antelope-island-state-park
+                utah-goblin-valley-state-park
                 ])
 
 
