@@ -34,6 +34,7 @@
 (def marker-icons
   {:climbing "images/climbing_marker_32x32.png" ;; check https://thenounproject.com/term/rock-climbing/529/
    :national-park "images/national_park_marker_32x32.png" ;; check https://thenounproject.com/search/?q=national+park&i=158731
+   :state-park "images/state_park_marker_32x32.png"
    :city "images/city_marker_32x32.png" ;; check http://megaicons.net/static/img/icons_title/22/119/title/city-building-icon.png
    :climbing-national-park "images/climbing_and_national_park_marker_32x32.png" ;; custom icon
    })
@@ -47,6 +48,7 @@
         (and (:climbing tags) (:national-park tags)) (assoc default-marker-options "icon" (:climbing-national-park marker-icons))
         (:climbing tags) (assoc default-marker-options "icon" (:climbing marker-icons))
         (:national-park tags) (assoc default-marker-options "icon" (:national-park marker-icons))
+        (:state-park tags) (assoc default-marker-options "icon" (:state-park marker-icons))
         (:city tags)(assoc default-marker-options "icon" (:city marker-icons))
         :else default-marker-options)
       default-marker-options)))
@@ -119,12 +121,20 @@
                    :component-did-mount map-component-did-mount
                    :display-name "map component"}))
 
+marker-icons
+(defn map-legend-component []
+  [:div#map-legend
+   [:table
+    (for [[tag, icon-img] marker-icons]
+      [:tr [:td [:img {:src icon-img}]] [:td tag]])]
+   [:p "Click icons to see more details"]])
+
 (defn show-route-component []
   (let [road-trip (:road-trip @app-db)]
     [:div#show-route
      [:p [:i "Start: "] [:b (arrival-date (first road-trip)) " " (:name (first road-trip))]]
-     [:p [:i  "Waypoints: "] (clojure.string/join " -> "
-                               (map  #(str (arrival-date %) " " (:name %)) (subvec  road-trip 1 (dec (count road-trip)))))]
+     [:p [:i  "Waypoints: "] [:br] (clojure.string/join " -> "
+                                     (map  #(str (arrival-date %) " " (:name %)) (subvec  road-trip 1 (dec (count road-trip)))))]
      [:p [:i "End: "] [:b (arrival-date (last road-trip)) " " (:name (last road-trip))]]]
     ))
 
@@ -132,12 +142,13 @@
   [:p "Total distance (in meters): " total-distance])
 
 (defn main-component []
-  [:div 
-   [:div#show-route {:style {:max-width "1000px"}} [show-route-component]]
+  [:div
+   [show-route-component]
    ;; we are not able to calculate total distance now - we just plot simple polylines
    ;; among the waypoints
    #_[:div [total-distance-component (:road-trip-distance @app-db)]]
-   [:div#map [map-component]]])
+   [:div#map [map-component]]
+   [map-legend-component]])
 
 ;;; rendering
 (defn mount-root []

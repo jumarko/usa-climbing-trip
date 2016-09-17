@@ -1,8 +1,8 @@
 .body-container {
   font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-top: 72px;
+  max-width: 1920px;
+  margin-left: 20px;
+  padding-top: 20px;
   -webkit-font-smoothing: antialiased;
   font-size: 1em;
   color: #333;
@@ -34,5 +34,18 @@ a:hover {
 }
 
 #show-route {
-  max-width: 100%
+  max-width: 80%;
 }
+
+#map-legend {
+  max-width: 100px;
+  position:fixed;
+  right: 10px;
+  top: 50px;
+}
+#map-legend p {
+  font-size: 80%;
+  font-style: italic;
+}
+
+  
