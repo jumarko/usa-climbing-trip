@@ -125,8 +125,9 @@ marker-icons
 (defn map-legend-component []
   [:div#map-legend
    [:table
-    (for [[tag, icon-img] marker-icons]
-      [:tr [:td [:img {:src icon-img}]] [:td tag]])]
+    [:tbody
+     (for [[tag, icon-img] marker-icons]
+       ^{:key tag} [:tr [:td [:img {:src icon-img}]] [:td tag]])]]
    [:p "Click icons to see more details"]])
 
 (defn show-route-component []
