@@ -110,7 +110,8 @@
                    :injections [(require 'pjstadig.humane-test-output)
                                 (pjstadig.humane-test-output/activate!)]
 
-                   :env {:dev true}}
+                   :env {:dev true}
+                   :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"]}
 
              :uberjar {:hooks [minify-assets.plugin/hooks]
                        :source-paths ["env/prod/clj"]
