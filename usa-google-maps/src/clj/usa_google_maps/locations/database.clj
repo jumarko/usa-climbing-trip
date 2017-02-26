@@ -31,6 +31,10 @@
                       #{:city}
                       ))
 
+(def denver-city (make-location "Denver" 39.7640021 -105.1352965 ""
+                                   #{:city}
+                                   ))
+
 (def bodie-ghost-town (make-location "Bodie - ghost town" 38.2141532 -119.0067897
                         "http://www.bodie.com/"
                         #{:city}))
@@ -80,10 +84,24 @@
                          "https://www.mountainproject.com/v/maple-canyon-road/106479926"
                          #{:climbing}))
 
+(def utah-saint-george (make-location "Utah - Saint George" 37.0508 -113.593
+                                      "https://www.mountainproject.com/v/saint-george/105716826"
+                                      #{:climbing}))
+
 (def nevada-red-rocks (make-location "Nevada - Red Rocks" 36.13129 -115.42453
                         "https://www.mountainproject.com/v/red-rock/105731932"
                         #{:climbing}
                         {:arrival "19-11-2016" :departure "27-11-2016"}))
+
+(def colorado-hartman-rocks (make-location "Colorado - Hartman Rocks" 38.49712 -106.94757
+                                           "https://www.mountainproject.com/v/hartman-rocks/105744394"
+                                           #{:climbing}
+                                           {:arrival "??-10-2016" :departure "??-10-2016"}))
+
+(def colorado-penitente-canyon (make-location "Colorado - Penitenty Canyon" 37.8429 -106.2847 
+                                   "https://www.mountainproject.com/v/penitente-canyon/105744316"
+                                   #{:climbing}
+                                   {:arrival "??-10-2016" :departure "??-10-2016"}))
 
 (def colorado-rifle (make-location "Colorado - Rifle" 39.7159 -107.6912
                       "https://www.mountainproject.com/v/rifle-mountain-park/105744310"
@@ -116,6 +134,10 @@
 (def california-buttermilk-bouldering (make-location "California - Buttermilk Country - bouldering" 37.3291 -118.5771
                                         "https://www.mountainproject.com/v/buttermilk-country/105876411"
                                         #{:climbing}))
+
+(def california-new-jack-city (make-location "New Jack City" 	34.66539 -116.97834
+                                             "https://www.mountainproject.com/v/new-jack-city/105865045"
+                                             #{:climbing}))
 
 (def arizona-cochise-stronghold (make-location "Arizona - Cochise Stronghold" 31.9212 -109.98703
                                   "http://www.mountainproject.com/v/cochise-stronghold/105738034"
@@ -185,62 +207,59 @@
 (def locations [los-angeles-airport
                 san-francisco
                 salt-lake-city
-                bodie-ghost-town
+                denver-city
 
                 oregon-smith-rock
-                oregon-trout-creek
                 idaho-city-of-rocks
                 utah-american-fork
                 utah-moab-wall-street
                 utah-moab-indian-creek
                 utah-arches
-                utah-logan
-                utah-maple-canyon
+                utah-saint-george
                 nevada-red-rocks
+                colorado-hartman-rocks
+                colorado-penitente-canyon
                 colorado-rifle
                 colorado-shelf-road
                 colorado-boulder-canyon
                 california-owens-river-gorge
-                california-needles
-                california-alabama-hills
-                california-buttermilk-bouldering
-                arizona-cochise-stronghold
-                oklahoma-wichita
+                california-new-jack-city
 
-                grand-canyon
-                yellowstone
-                grand-teton
                 rocky-mountain
+                yellowstone
                 yosemite
                 zion
+                grand-canyon
                 joshua-tree
                 death-valley
-                grand-canyon
-
-                utah-dead-horse-state-park
-                utah-antelope-island-state-park
-                utah-goblin-valley-state-park
                 ])
 
 
 
-(def road-trip [san-francisco
-                yosemite
+(def road-trip [los-angeles-airport
+                san-francisco
                 oregon-smith-rock
                 idaho-city-of-rocks
-                utah-logan
-                grand-teton
-                rocky-mountain
-                colorado-boulder-canyon
+                salt-lake-city
+                utah-american-fork
+                colorado-hartman-rocks
+                colorado-penitente-canyon
                 colorado-shelf-road
+                colorado-boulder-canyon
+                rocky-mountain
+                denver-city
+                colorado-shelf-road
+                denver-city
                 colorado-rifle
                 utah-moab-wall-street
                 utah-moab-indian-creek
                 utah-arches
                 zion
-                grand-canyon
+                utah-saint-george
                 nevada-red-rocks
                 death-valley
                 california-owens-river-gorge
+                california-new-jack-city
+                nevada-red-rocks
                 joshua-tree
                 los-angeles-airport])
