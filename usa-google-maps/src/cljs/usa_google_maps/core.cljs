@@ -26,6 +26,12 @@
     :departure
     format-date))
 
+(defn- format-coordinates [location]
+  (str "[" (:lat location) " " (:lng location) "]"))
+
+(defn- format-location [location]
+  (str (arrival-date location) " " (:name location) " " (format-coordinates location)))
+
 
 ;;; reusable functions for work with google js api
 (defn create-lat-lng [location]
@@ -72,12 +78,12 @@
                                             (:uri location) "'>" (:name location) "</a></br>"
                                             "Arrival: " (arrival-date location)
                                             "; Departure: " (departure-date location)
-                                            "</p>"
-                                            "</div>")}))]
-    (js/google.maps.event.addListener
-      marker
-      "click"
-      #(.open info-window map marker))))
+  "</p>"
+  "</div>")}))]
+(js/google.maps.event.addListener
+  marker
+  "click"
+  #(.open info-window map marker))))
 
 (defn create-map [location dom-element]
   (let [map-opts (clj->js {"center" (create-lat-lng location)
@@ -102,8 +108,8 @@
 ;;; map component
 (defn map-component-render []
   [:div {:style {:position "relative"
-                 :width "1280px"
-                 :height "800px"
+                 :width "2560px"
+                 :height "1320px"
                  :align "center"}}])
 
 (defn map-component-did-mount [this]
@@ -135,7 +141,7 @@ marker-icons
     [:div#show-route
      [:p [:i "Start: "] [:b (arrival-date (first road-trip)) " " (:name (first road-trip))]]
      [:p [:i  "Waypoints: "] [:br] (clojure.string/join " -> "
-                                     (map  #(str (arrival-date %) " " (:name %)) (subvec  road-trip 1 (dec (count road-trip)))))]
+                                     (map format-location (subvec  road-trip 1 (dec (count road-trip)))))]
      [:p [:i "End: "] [:b (arrival-date (last road-trip)) " " (:name (last road-trip))]]]
     ))
 
